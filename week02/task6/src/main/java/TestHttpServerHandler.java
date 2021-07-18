@@ -35,7 +35,6 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler {
                         content = Unpooled.copiedBuffer("request fail, unAuthorized request", CharsetUtil.UTF_8);
                     }
 
-
                     //构造响应
                     FullHttpResponse response =
                             new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
@@ -48,6 +47,28 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler {
                     ctx.writeAndFlush(response);
                 }
             });
+        }
+        if(msg instanceof HttpContent){
+            HttpContent httpContent = (HttpContent) msg;
+
+            ByteBuf content = httpContent.content();
+
+            ByteBuf buf = Unpooled.copiedBuffer("Post request"+content.toString(), CharsetUtil.UTF_8);;
+
+            //构造响应
+            FullHttpResponse response =
+                    new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, buf);
+
+            //设置头信息的的MIME类型
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");  //内容类型
+            //设置要返回的内容长度
+            response.headers().set(HttpHeaderNames.CONTENT_LENGTH, buf.readableBytes()); //内容长度
+
+
+
+            //将响应对象返回
+            ctx.writeAndFlush(response);
+
         }
     }
 
@@ -88,5 +109,10 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler {
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channel unregister...");
         super.channelUnregistered(ctx);
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        super.channelReadComplete(ctx);
     }
 }

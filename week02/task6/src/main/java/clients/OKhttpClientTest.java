@@ -11,8 +11,10 @@ import java.util.Objects;
 
 public class OKhttpClientTest {
     public static void main(String[] args) {
-        request("http://localhost:8801");
-        request("http://localhost:8801", "opentoken", "crazydroid");
+        for (int i = 0; i < 1000; i++) {
+            request("http://localhost:8801");
+            request("http://localhost:8801", "opentoken", "crazydroid");
+        }
     }
 
     public static void request(String url) {
@@ -38,7 +40,6 @@ public class OKhttpClientTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 }

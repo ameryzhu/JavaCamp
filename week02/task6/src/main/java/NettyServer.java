@@ -3,6 +3,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 
 public class NettyServer {
@@ -22,6 +23,7 @@ public class NettyServer {
 //                        ch.pipeline().addLast(new RequestInterceptor());
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast("httpServerCodec",new HttpServerCodec());
+//                        pipeline.addLast("httpObjectAggregator",new HttpObjectAggregator(1024 * 1024));
                         pipeline.addLast("testHttpServerHandler",new TestHttpServerHandler());
                     }
                 }).option(ChannelOption.SO_BACKLOG, 128)
