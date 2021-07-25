@@ -10,5 +10,26 @@
 
     <context:component-scan base-package="com.example.springbean.beans"/>
     <bean id="myAnnotationBean" class="com.example.springbean.beans.MyAnnotationSpringBean"/>
+    <bean id="student123" class="com.example.springbean.beans.Student">
+        <property name="id" value="123"/>
+        <property name="name" value="studentname"/>
+    </bean>
+    <bean id="student100" class="com.example.springbean.beans.Student">
+        <property name="id" value="100"/>
+        <property name="name" value="KK100"/>
+    </bean>
+
+    <bean id="class1" class="com.example.springbean.beans.Klass">
+        <property name="students">
+            <list>
+                <ref bean="student100"/>
+                <ref bean="student123"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="school100" class="com.example.springbean.beans.School"/>
+
+
 
 </beans>
