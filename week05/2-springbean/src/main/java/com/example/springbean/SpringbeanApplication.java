@@ -2,18 +2,26 @@ package com.example.springbean;
 
 import com.example.springbean.beans.*;
 import com.example.springbean.config.MyConfig;
+import com.example.springbean.db.User;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.IOException;
+
 @SpringBootApplication
 public class SpringbeanApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SpringApplication.run(SpringbeanApplication.class, args);
-        testSchool();
+//        testSchool();
+        insertData();
     }
 
 
@@ -53,6 +61,18 @@ public class SpringbeanApplication {
         System.out.println(school);
         System.out.println("ISchool接口的对象"+school.getClass());
 
+    }
+
+    public static void insertData() throws IOException {
+        SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
+        SqlSession sqlSession = factory.openSession();
+        User u = new User();
+        u.setUser_name("zhuzhe2");
+        u.setPhone("18566226037");
+        int result =sqlSession.insert("insert into user",u);
+//        sqlSession.insert("insert");
+        System.out.println(result);
+        sqlSession.close();
     }
 
 }
