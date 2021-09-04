@@ -1,5 +1,6 @@
 package com.example.week11;
 
+import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,18 @@ public class DataService {
     public synchronized String queryData(String key){
         System.out.println("request params:key:"+key);
         return redisTemplate.opsForValue().get(key);
+    }
+
+    public synchronized String getOrder(String orderNum){
+        String number = queryData("order_remain");
+        if(StringUtil.isNullOrEmpty(number)){
+            return "0";
+        }else{
+            int rest = Integer.parseInt(number);
+            int orderInt = Integer.parseInt(orderNum);
+            String result = "" + (rest - orderInt);
+            insertData("order_remain", "" + result);
+            return result;
+        }
     }
 }
